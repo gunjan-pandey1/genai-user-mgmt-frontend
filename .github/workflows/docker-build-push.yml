@@ -27,8 +27,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./genai-user-mgmt-frontend
-          file: ./genai-user-mgmt-frontend/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
