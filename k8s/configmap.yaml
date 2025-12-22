@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: genai-frontend
+  labels:
+    app: genai-user-mgmt
+    tier: frontend
+data:
+  VITE_API_URL: http://genai-backend-service.genai-backend.svc.cluster.local:8000
+

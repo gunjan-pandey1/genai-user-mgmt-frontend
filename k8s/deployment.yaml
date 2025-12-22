@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: genai-frontend-deployment
+  namespace: genai-frontend
+  labels:
+    app: genai-user-mgmt
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: genai-user-mgmt
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: genai-user-mgmt
+        tier: frontend
+    spec:
+      containers:
+        - name: genai-frontend
+          image: ${{ secrets.DOCKER_USERNAME }}/genai-user-mgmt-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          envFrom:
+            - configMapRef:
+                name: frontend-config
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+
